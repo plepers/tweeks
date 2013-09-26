@@ -1,0 +1,32 @@
+{
+  "name": "tweeks",
+  "version": "0.1.0",
+  "description": "One tween for rule them all",
+  "main": "tweeks.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/plepers/tweeks.git"
+  },
+  "keywords": [
+    "tween",
+    "animation",
+    "sequencer",
+    "progression",
+    "control"
+  ],
+  "author": "Pierre Lepers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plepers/tweeks/issues"
+  },
+  "devDependencies": {
+    "sinon": "~1.7.3",
+    "should": "~1.3.0"
+  }
+}
