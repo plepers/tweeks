@@ -1,9 +1,12 @@
 
 (function(define, global) {
     'use strict';
+
     define(function (require) {
 
-
+        var _ease_none = function( p ){
+            return p;
+        };
 
         function Sequence( offset, duration ) {
 
@@ -14,23 +17,14 @@
             this._callbacks = [];
             this._bindings = [];
 
+            this._ease = _ease_none;
+
         }
 
         Sequence.prototype = {
 
-            _update : function( progress ) {
-                var i, l, p;
-                var binding;
-
-                this._progress = p = progress * this._duration + this._offset;
-
-                for( i=0, l=this._callbacks.length; i<l; i++ ) {
-                    this._callbacks[i]( p );
-                }
-                for( i=0, l=this._bindings.length; i<l; i++ ) {
-                    binding = this._bindings[i];
-                    binding.target[binding.prop] = p;
-                }
+            getProgress : function() {
+                return this._progress;
             },
 
             bind : function( target, prop ) {
@@ -46,9 +40,42 @@
                 } else
                     throw new TypeError();
 
+            },
+
+            ease : function( easeFunc ) {
+                this._ease = easeFunc || _ease_none;
+                return this;
+            },
+
+            // --------
+            // Privates
+            // --------
+
+            _update : function( progress ) {
+                var i, l, p;
+                var binding;
+
+                p = ( progress - this._offset ) / this._duration;
+                if( p > 1.0 ) p = 1.0;
+                else if( p < 0.0 ) p = 0.0;
+
+                p = this._ease( p );
+
+                if( p === this._progress )
+                    return;
+
+                this._progress = p;
+
+                for( i=0, l=this._callbacks.length; i<l; i++ ) {
+                    this._callbacks[i]( p );
+                }
+                for( i=0, l=this._bindings.length; i<l; i++ ) {
+                    binding = this._bindings[i];
+                    binding.target[binding.prop] = p;
+                }
             }
 
-        }
+        };
 
 
 
@@ -64,21 +91,22 @@
                     this._setProgress( p );
                 }
             });
-        }
+        };
 
         Tweeks.prototype = {
 
             _setProgress : function( p ) {
 
-                var i, l;
+                var i, l, seqs;
 
                 if( this._progress === p )
                     return;
 
                 this._progress = p;
+                seqs = this._sequences;
 
-                for( i = 0, l = this._sequences.length; i<l; i++ )
-                    seq._update( p );
+                for( i = 0, l = seqs.length; i<l; i++ )
+                    seqs[i]._update( p );
 
             },
 
@@ -89,17 +117,20 @@
                 var seq = new Sequence( offset, duration );
                 this._sequences.push( seq );
                 seq._update( this._progress );
+                return seq;
             },
 
             /*
              *
              */
             dispose : function() {
-
+                this._sequences = null;
             }
 
 
-        }
+        };
+
+        return Tweeks;
 
     });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); }, this);

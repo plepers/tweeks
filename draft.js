@@ -13,9 +13,10 @@ var sequencer = new Tweequencer();
 
 var seq = sequencer.sequence( 0.2, 0.4 );
 
-seq.callback = function( p ) {
-    foo.progress = p;
-}
+
 
 seq.bind( foo, "progress" );
 
+seq.bind( function( p ) {
+    bar.progress = p;
+} )
