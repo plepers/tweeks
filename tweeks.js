@@ -88,14 +88,14 @@
                     return this._progress;
                 },
                 set : function (p) {
-                    this._setProgress( p );
+                    this.setProgress( p );
                 }
             });
         };
 
         Tweeks.prototype = {
 
-            _setProgress : function( p ) {
+            setProgress : function( p ) {
 
                 var i, l, seqs;
 
