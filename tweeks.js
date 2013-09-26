@@ -120,6 +120,20 @@
                 return seq;
             },
 
+
+            /*
+             *
+             */
+            map : function( array ) {
+                var i, l;
+                var res = [];
+
+                for (i = 0, l = array.length; i < l; i+=4) {
+                    res.push( this.add( array[i], array[i+1]).bind(array[i+2], array[i+3] ) );
+                }
+                return res;
+            },
+
             /*
              *
              */
