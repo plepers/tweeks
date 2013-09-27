@@ -89,7 +89,7 @@ describe('Sequence', function() {
             tweeks.progress = 0.3;
             s.getProgress().should.equal( 1.0 );
             tweeks.progress = 0.15;
-            s.getProgress().should.equal(.6 );
+            s.getProgress().should.equal( .5 );
         });
 
 
